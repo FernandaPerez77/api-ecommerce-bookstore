@@ -1,7 +1,8 @@
 const express = require('express');
-
 const app = express();
-const PORT = process.env.PORT || 5100;
+
+// Forzamos el 5100 directo para saltarnos cualquier variable oculta
+const PORT = 5100; 
 
 app.get('/', (req, res) => {
     res.send('Hello BookStore API');
