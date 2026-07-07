@@ -18,6 +18,8 @@ app.use('/api/users', require('./src/routes/userRoutes'));
 
 // Swagger Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api/carts', require('./src/routes/cartRoutes'));
+app.use('/api/orders', require('./src/routes/orderRoutes'));
 
 app.get('/', (req, res) => {
     res.send('Hello BookStore API');

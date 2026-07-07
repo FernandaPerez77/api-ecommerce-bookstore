@@ -1,3 +1,15 @@
+const express = require('express');
+const router = express.Router();
+
+const bookController = require('../controllers/bookController');
+
+/**
+ * @swagger
+ * tags:
+ *   name: Books
+ *   description: Book management
+ */
+
 /**
  * @swagger
  * /api/books:
@@ -8,6 +20,25 @@
  *       200:
  *         description: List of books
  */
+router.get('/', bookController.getBooks);
+
+/**
+ * @swagger
+ * /api/books/{id}:
+ *   get:
+ *     summary: Get a book by ID
+ *     tags: [Books]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Book found
+ */
+router.get('/:id', bookController.getBookById);
 
 /**
  * @swagger
@@ -24,39 +55,17 @@
  *             properties:
  *               title:
  *                 type: string
- *                 example: Clean Code
  *               author:
  *                 type: string
- *                 example: Robert Martin
  *               price:
  *                 type: number
- *                 example: 450
  *               stock:
  *                 type: number
- *                 example: 15
  *     responses:
  *       201:
  *         description: Book created
  */
-
-/**
- * @swagger
- * /api/books/{id}:
- *   get:
- *     summary: Get a book by ID
- *     tags: [Books]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: Book ID
- *         schema:
- *           type: string
- *           example: 6870c2a1d45e9ab123456789
- *     responses:
- *       200:
- *         description: Book found
- */
+router.post('/', bookController.createBook);
 
 /**
  * @swagger
@@ -76,14 +85,11 @@
  *         application/json:
  *           schema:
  *             type: object
- *             properties:
- *               stock:
- *                 type: number
- *                 example: 20
  *     responses:
  *       200:
  *         description: Book updated
  */
+router.put('/:id', bookController.updateBook);
 
 /**
  * @swagger
@@ -95,19 +101,12 @@
  *       - in: path
  *         name: id
  *         required: true
- *         description: Book ID
  *         schema:
  *           type: string
- *           example: 6869fe2c65e8d92a7b45c123
  *     responses:
  *       200:
  *         description: Book deleted
  */
-const express = require('express');
-
-const router = express.Router();
-
-const { getBooks } = require('../controllers/bookController');
-router.get('/', getBooks);
+router.delete('/:id', bookController.deleteBook);
 
 module.exports = router;
