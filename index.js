@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./src/config/database');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./src/docs/swagger');
+const verifyAppToken = require('./src/middlewares/authMiddlewares');
 
 dotenv.config();
 
@@ -13,9 +14,9 @@ const app = express();
 app.use(express.json());
 
 // Routes
-app.use('/api/books', require('./src/routes/bookRoutes'));
-app.use('/api/users', require('./src/routes/userRoutes'));
-
+app.use('/api/books', verifyAppToken, require('./src/routes/bookRoutes'));
+app.use('/api/users', verifyAppToken, require('./src/routes/userRoutes'));
+app.use('/api/auth', require('./src/routes/authRoutes'));
 // Swagger Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

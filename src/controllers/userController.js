@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 
 // GET all users
 const getUsers = async(req,res)=>{
@@ -34,6 +35,52 @@ const createUser = async(req,res)=>{
     }
 };
 
+
+// POST login user -> generates JWT
+const login = async(req,res)=>{
+    try{
+
+        const { email, password } = req.body;
+
+        const user = await User.findOne({ email });
+
+        if(!user){
+            return res.status(404).json({
+                message:'User not found'
+            });
+        }
+
+        if(password !== user.password){
+            return res.status(401).json({
+                message:'Invalid password'
+            });
+        }
+
+        const token = jwt.sign(
+            {
+                id:user._id,
+                email:user.email,
+                premium:user.premium
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn:process.env.JWT_EXPIRES_IN
+            }
+        );
+
+        res.json({
+            message:'Login successful',
+            token
+        });
+
+    }catch(error){
+
+        res.status(500).json({
+            message:error.message
+        });
+
+    }
+};
 
 // GET user by id
 const getUserById = async(req,res)=>{
@@ -103,5 +150,6 @@ module.exports = {
     createUser,
     getUserById,
     updateUser,
-    deleteUser
+    deleteUser,
+    login
 };
