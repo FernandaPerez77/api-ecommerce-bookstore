@@ -4,6 +4,7 @@ const connectDB = require('./src/config/database');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./src/docs/swagger');
 const verifyAppToken = require('./src/middlewares/authMiddlewares');
+const helmet = require('helmet');
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ app.use('/api/users', verifyAppToken, require('./src/routes/userRoutes'));
 app.use('/api/auth', require('./src/routes/authRoutes'));
 // Swagger Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+//Helmet
+app.use(helmet());
 
 app.get('/', (req, res) => {
     res.send('Hello BookStore API');
